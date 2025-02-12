@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import envConfig from "./config";
 
-const connectToDatabase=async()=>{
+const connectToDatabase= async ()=>{
     try {
         mongoose.connection.on("connected",()=>{
-            console.log("Connected to database")
+            console.log("Connected to database successfully");
         });
         await mongoose.connect(envConfig.mongodbString as string)
         

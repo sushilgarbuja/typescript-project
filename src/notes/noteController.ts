@@ -1,7 +1,8 @@
-import {Request,Response} from 'express'
+import {NextFunction, Request,Response} from 'express'
 import noteModel from './noteModel'
 import envConfig from '../config/config'
-const createNote= async(req:Request,res:Response)=>{
+import createHttpError from 'http-errors'
+const createNote= async(req:Request,res:Response,next:NextFunction)=>{
     try{
         const file=req.file ? `${envConfig.backendUrl}/${req.file.filename}` : 'https://t3.ftcdn.net/jpg/04/88/23/76/360_F_488237693_FNSP61ywk1MysxipZtbnTkKy2Rht2562.jpg'
     const {title,subtitle,description}=req.body
@@ -32,6 +33,8 @@ const createNote= async(req:Request,res:Response)=>{
     })
     }catch(error){
         console.log(error)
+        next(createHttpError(500,'Error while creating'))
     }
 
 }
+export {createNote}

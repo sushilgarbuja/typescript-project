@@ -2,6 +2,8 @@ import {NextFunction, Request,Response} from 'express'
 import noteModel from './noteModel'
 import envConfig from '../config/config'
 import createHttpError from 'http-errors'
+
+
 const createNote= async(req:Request,res:Response,next:NextFunction)=>{
     try{
         createHttpError(500,'Error while creating')
@@ -25,6 +27,47 @@ const createNote= async(req:Request,res:Response,next:NextFunction)=>{
         console.log(error)
         next(createHttpError(500,'Error while creating'))
     }
-
 }
-export {createNote}
+
+const getAllNotes=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const notes=await noteModel.find();
+        res.status(200).json({
+            message:"Notes fetched successfully",
+            data:notes
+        })
+    }catch(error){
+        next(createHttpError(500,'Error while getting all notes'))
+    }
+}
+
+const getNote=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        // const {id}=req.params
+        const note=await noteModel.findById(req.params.id);
+        if(!note){
+            res.status(404).json({
+                message:"Note not found"
+            })
+            return
+        }
+        res.status(200).json({
+            message:"Note fetched successfully",
+            data:note
+        })
+    }catch(error){
+        next(createHttpError(500,'Error while getting note'))
+    }
+}
+
+const deleteNote=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        await noteModel.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            message:"Note deleted successfully"
+        })
+    }catch(error){
+        next(createHttpError(500,'Error while deleting note'))
+    }
+}
+export {createNote,getAllNotes,getNote,deleteNote}

@@ -70,4 +70,16 @@ const deleteNote=async(req:Request,res:Response,next:NextFunction)=>{
         next(createHttpError(500,'Error while deleting note'))
     }
 }
-export {createNote,getAllNotes,getNote,deleteNote}
+
+const updateNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      await noteModel.findByIdAndUpdate(id, req.body);
+      res.status(200).json({
+        message: "Note updated successfully"
+      })
+    } catch (error) {
+      next(createHttpError(500, 'Error while updating note'))
+    }
+  }
+export {createNote,getAllNotes,getNote,deleteNote,updateNote}

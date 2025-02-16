@@ -7,8 +7,8 @@ export default async function Home() {
   if (!response.ok) {
     throw new Error('Failed to fetch data')
   }
-  const responseData = await response.json()
-  console.log(responseData)
+  const { data: notes } = await response.json()
+  console.log(notes)
   return (
     <>
       <HeroSection />

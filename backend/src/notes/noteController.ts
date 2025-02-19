@@ -45,6 +45,7 @@ const getNote=async(req:Request,res:Response,next:NextFunction)=>{
     try{
         // const {id}=req.params
         const note=await noteModel.findById(req.params.id);
+        console.log(req.params.id)
         if(!note){
             res.status(404).json({
                 message:"Note not found"
